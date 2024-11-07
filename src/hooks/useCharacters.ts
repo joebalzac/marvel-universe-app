@@ -39,5 +39,5 @@ const useCharacters = (
     isLoading,
   };
 };
-
+//this is working now
 export default useCharacters;
