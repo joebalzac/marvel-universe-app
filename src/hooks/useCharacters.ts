@@ -5,7 +5,10 @@ export interface MarvelCharacter {
   id: number;
   description: string;
   urls: { [key: string]: string }[];
-  thumbnail: string;
+  thumbnail: {
+    path: string;
+    extension: string;
+  };
   stories: string;
 }
 

@@ -10,20 +10,23 @@ const CharacterList = () => {
   if (error) {
     return <div>Error: {error}</div>;
   }
+  console.log("Fetched data:", data);
 
-  {
-    data?.map((character) => {
-      return (
+  return (
+    <div>
+      {data?.map((character) => (
         <div key={character.id}>
           <h2>{character.name}</h2>
-          <p>{character.description}</p>
-          <img src={character.thumbnail} alt={character.name} />
+          <p>{character.description || "No description available"}</p>
+          <img
+            src={`${character.thumbnail.path}.${character.thumbnail.extension}`}
+            alt={character.name}
+            style={{ width: "150px", height: "150px" }} // adjust size as needed
+          />
         </div>
-      );
-    });
-  }
-
-  return <div>CharacterList</div>;
+      ))}
+    </div>
+  );
 };
 
 export default CharacterList;
