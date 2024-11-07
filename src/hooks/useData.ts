@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import apiClient from "../services/api-client";
-import md5 from "md5";
+import md5 from "md5"; 
+import { CanceledError } from "axios";
 
 const publicKey = "26715120c25a3d3ee06ceeb986a5aba7";
 const privateKey = "7f138beb153b52efeb32bbc71d7a8e8ee95e7b1d";
@@ -13,10 +14,10 @@ interface FetchResponse<T> {
   results: T[];
 }
 
-const useData = <T>(endpoint: string, deps?: any[]) => {
-  const [data, setData] = useState<T[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+const useData = <T>(endpoint: string, deps: any[]) => {
+  const [data, setData] = useState<T[] | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -28,7 +29,7 @@ const useData = <T>(endpoint: string, deps?: any[]) => {
         signal: controller.signal,
         params: {
           ts,
-          apiKey: publicKey,
+          apikey: publicKey,
           hash,
         },
       })
@@ -37,11 +38,14 @@ const useData = <T>(endpoint: string, deps?: any[]) => {
         setIsLoading(false);
       })
       .catch((err) => {
+        if (err instanceof CanceledError) return;
+        console.error("Fetch error:", err.message);
         setError(err);
         setIsLoading(false);
       });
+
     return () => controller.abort();
-  }, deps || []);
+  }, deps );
 
   return { data, isLoading, error };
 };

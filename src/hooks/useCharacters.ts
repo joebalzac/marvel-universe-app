@@ -30,14 +30,7 @@ const useCharacters = (
 
   const { data, error, isLoading } = useData<MarvelCharacter>(
     "/v1/public/characters",
-    [
-      {
-        params: {
-          hash: "",
-          apiKey: apiParams,
-        },
-      }
-    ]
+    [apiParams]
   );
 
   return {
