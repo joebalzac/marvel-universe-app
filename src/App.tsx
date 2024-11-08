@@ -1,10 +1,10 @@
-import "./App.css";
-import CharacterList from "./components/CharacterList";
+import "./input.css";
+import CharacterGrid from "./components/CharacterGrid";
 
 function App() {
   return (
     <>
-      <CharacterList />
+      <CharacterGrid />
     </>
   );
 }
