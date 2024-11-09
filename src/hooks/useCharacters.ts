@@ -9,7 +9,14 @@ export interface MarvelCharacter {
     path: string;
     extension: string;
   };
-  stories: string;
+  comics: {
+    available: number;
+    items: { name: string }[];
+  };
+  series: {
+    available: number;
+    items: { name: string }[];
+  };
 }
 
 interface UseMarvelResults {
@@ -37,7 +44,7 @@ const useCharacters = (
   );
 
   return {
-    data: Array.isArray(data) ? data : data ? [data] : undefined,
+    data: Array.isArray(data) ? data : undefined,
     error: error ? (error as Error).message : null,
     isLoading,
   };

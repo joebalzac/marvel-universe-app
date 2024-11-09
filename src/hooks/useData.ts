@@ -42,7 +42,7 @@ const useData = <T>(endpoint: string, deps: any[]) => {
           apikey: publicKey,
           hash,
           offset: 0,
-          limit: 20,
+          limit: 50,
         },
       })
       .then((res) => {

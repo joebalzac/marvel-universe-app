@@ -13,18 +13,23 @@ const CharacterGrid = () => {
 
   return (
     <>
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-4 gap-4">
         {isLoading
           ? skeletons.map((skeleton) => (
               <CharacterCardContainer key={skeleton}>
                 <CharacterCardSkeleton />
               </CharacterCardContainer>
             ))
-          : data?.map((character) => (
-              <CharacterCardContainer key={character.id}>
-                <CharacterCard character={character} />
-              </CharacterCardContainer>
-            ))}
+          : data
+              ?.filter(
+                (character) =>
+                  !character.thumbnail.path.includes("image_not_available")
+              )
+              .map((character) => (
+                <CharacterCardContainer key={character.id}>
+                  <CharacterCard character={character} />
+                </CharacterCardContainer>
+              ))}
       </div>
     </>
   );
