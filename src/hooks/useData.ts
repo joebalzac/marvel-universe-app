@@ -56,7 +56,7 @@ const useData = <T>(
       })
       .then((res) => {
         console.log("Full API response:", res.data);
-        
+        setData((prevData) => [...(prevData || []), ...res.data.data.results]);
         setIsLoading(false);
       })
       .catch((err) => {
