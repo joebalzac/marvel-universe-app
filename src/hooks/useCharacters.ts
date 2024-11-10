@@ -1,3 +1,4 @@
+import { useState } from "react";
 import useData from "./useData";
 
 export interface MarvelCharacter {
@@ -23,6 +24,7 @@ interface UseMarvelResults {
   data: MarvelCharacter[] | undefined;
   error: string | null;
   isLoading?: boolean;
+  loadMore: () => void;
 }
 
 const useCharacters = (
@@ -31,22 +33,28 @@ const useCharacters = (
     theme?: string;
   } = {}
 ): UseMarvelResults => {
-  const { query = "", theme = "" } = params;
-
-  const apiParams = JSON.stringify({
-    query: query || undefined,
-    theme: theme || undefined,
-  });
+  const { query = "" } = params;
+  const [page, setPage] = useState(0);
+  // const apiParams = JSON.stringify({
+  //   query: query,
+  //   theme: theme || undefined,
+  // });
+  const offset = page * 20;
 
   const { data, error, isLoading } = useData<MarvelCharacter>(
     "/v1/public/characters",
-    [apiParams]
+    [query, page],
+    query,
+    offset
   );
+
+  const loadMore = () => setPage((prevPage) => prevPage + 1);
 
   return {
     data: Array.isArray(data) ? data : undefined,
     error: error ? (error as Error).message : null,
     isLoading,
+    loadMore,
   };
 };
 export default useCharacters;
