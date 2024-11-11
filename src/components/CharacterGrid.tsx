@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import useCharacters from "../hooks/useCharacters";
 import CharacterCard from "./CharacterCard";
 import CharacterCardContainer from "./CharacterCardContainer";
@@ -9,6 +9,9 @@ const CharacterGrid = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const { data, error, isLoading } = useCharacters({ query: searchQuery });
   const skeletons = [...Array(10).keys()];
+
+  // Create a ref for the loader element
+  const loaderRef = useRef<HTMLDivElement | null>(null);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -22,7 +25,7 @@ const CharacterGrid = () => {
     <>
       <SearchInput onSearch={handleSearch} />
       {error && <div className="text-red-500">{error}</div>}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {isLoading
           ? skeletons.map((skeleton) => (
               <CharacterCardContainer key={skeleton}>
@@ -39,6 +42,10 @@ const CharacterGrid = () => {
                   <CharacterCard character={character} />
                 </CharacterCardContainer>
               ))}
+      </div>
+      {/* Loader element for infinite scrolling */}
+      <div ref={loaderRef} style={{ height: "20px", marginTop: "10px" }}>
+        {isLoading && <div>Loading more characters...</div>}
       </div>
     </>
   );

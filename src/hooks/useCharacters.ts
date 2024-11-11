@@ -39,13 +39,11 @@ const useCharacters = (
   //   query: query,
   //   theme: theme || undefined,
   // });
-  const offset = page * 20;
 
   const { data, error, isLoading } = useData<MarvelCharacter>(
     "/v1/public/characters",
     [query, page],
-    query,
-    offset
+    query
   );
 
   const loadMore = () => setPage((prevPage) => prevPage + 1);

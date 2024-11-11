@@ -24,22 +24,20 @@ interface FetchResponse<T> {
   data: MarvelData<T>;
 }
 
-const useData = <T>(
-  endpoint: string,
-  deps: any[],
-  query: string,
-  offset: number
-) => {
+const useData = <T>(endpoint: string, deps: any[], query: string) => {
   const [data, setData] = useState<T[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
+  const [offset, setOffset] = useState<number>(0);
+  const [hasMore, setHasMore] = useState<boolean>(true);
 
-  useEffect(() => {
+  const fetchData = async () => {
+    if (!hasMore) return;
+
     const controller = new AbortController();
     const ts = new Date().getTime().toString();
     const hash = md5(ts + privateKey + publicKey);
 
-    setData([]);
     setIsLoading(true);
 
     apiClient
@@ -49,14 +47,18 @@ const useData = <T>(
           ts,
           apikey: publicKey,
           hash,
-          offset,
-          limit: 20,
+          offset: 0,
+          limit: 50,
           ...(query && { nameStartsWith: query }),
         },
       })
       .then((res) => {
         console.log("Full API response:", res.data);
         setData((prevData) => [...(prevData || []), ...res.data.data.results]);
+        setOffset((prevOffset) => prevOffset + res.data.data.count);
+        setHasMore(
+          res.data.data.offset + res.data.data.count < res.data.data.total
+        );
         setIsLoading(false);
       })
       .catch((err) => {
@@ -67,6 +69,10 @@ const useData = <T>(
       });
 
     return () => controller.abort();
+  };
+
+  useEffect(() => {
+    fetchData();
   }, [query, offset, ...deps]);
 
   return { data, isLoading, error };

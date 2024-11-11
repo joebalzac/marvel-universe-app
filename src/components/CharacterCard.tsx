@@ -7,7 +7,7 @@ interface Character {
 const CharacterCard = ({ character }: Character) => {
   return (
     <div
-      className="bg-slate-900 shadow-sm overflow-hidden radius"
+      className="bg-slate-900 shadow-sm overflow-hidden radius flex flex-col justify-center"
       key={character.id}
     >
       <img
@@ -17,7 +17,9 @@ const CharacterCard = ({ character }: Character) => {
         style={{ width: "150px", height: "150px" }}
       />
       <h2 className="text-2xl text-white font-semibold">{character.name}</h2>
-      <p className="">{character.description || "No description available"}</p>
+      <p className="text-1xl text-center">
+        {character.description || "No description available"}
+      </p>
     </div>
   );
 };
