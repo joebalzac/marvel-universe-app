@@ -25,6 +25,7 @@ interface UseMarvelResults {
   error: string | null;
   isLoading?: boolean;
   loadMore: () => void;
+  isFetchingMore: boolean;
 }
 
 const useCharacters = (
@@ -40,7 +41,7 @@ const useCharacters = (
   //   theme: theme || undefined,
   // });
 
-  const { data, error, isLoading } = useData<MarvelCharacter>(
+  const { data, error, isLoading, isFetchingMore } = useData<MarvelCharacter>(
     "/v1/public/characters",
     [query, page],
     query
@@ -53,6 +54,7 @@ const useCharacters = (
     error: error ? (error as Error).message : null,
     isLoading,
     loadMore,
+    isFetchingMore,
   };
 };
 export default useCharacters;

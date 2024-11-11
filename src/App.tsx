@@ -1,10 +1,14 @@
 import "./input.css";
 import CharacterGrid from "./components/CharacterGrid";
+import NavBar from "./components/NavBar";
 
 function App() {
   return (
     <>
-      <CharacterGrid />
+      <div className="flex flex-col">
+        <NavBar />
+        <CharacterGrid />
+      </div>
     </>
   );
 }

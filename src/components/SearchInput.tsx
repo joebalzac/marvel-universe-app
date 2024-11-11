@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { IoIosSearch } from "react-icons/io";
 
 interface SearchInputProps {
   onSearch: (searchText: string) => void;
@@ -27,26 +28,21 @@ const SearchInput = ({ onSearch }: SearchInputProps) => {
       }}
     >
       <div>
+        {/* <IoIosSearch className="absolute top-2/4 left-3 translate-x-1/2 text-lg pointer-events-none z-10" /> */}
         <input
-          className="border border-gray-400 p-2 w-full rounded
+          className="bg-[<url('/img/hero-pattern.svg')>] border border-gray-400 p-2 h-11 w-full rounded-3xl
           focus:outline-none focus:ring focus:border-blue-300 text-gray-950"
           ref={ref}
           type="text"
           placeholder="Search for a character"
           onChange={(e) => setInputValue(e.target.value)}
-        />
-        <button
-          type="submit"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           onSubmit={(e) => {
             e.preventDefault();
             if (ref.current) {
               onSearch(ref.current.value);
             }
           }}
-        >
-          Search
-        </button>
+        />
       </div>
     </form>
   );

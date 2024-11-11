@@ -24,21 +24,36 @@ interface FetchResponse<T> {
   data: MarvelData<T>;
 }
 
-const useData = <T>(endpoint: string, deps: any[], query: string) => {
+interface Identifiable {
+  id: number;
+}
+
+const useData = <T extends Identifiable>(
+  endpoint: string,
+  deps: any[],
+  query: string
+) => {
   const [data, setData] = useState<T[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isFetchingMore, setIsFetchingMore] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
   const [offset, setOffset] = useState<number>(0);
   const [hasMore, setHasMore] = useState<boolean>(true);
 
-  const fetchData = async () => {
-    if (!hasMore) return;
+  const fetchData = (isInitialLoad: boolean = false) => {
+    if (!hasMore && !isInitialLoad) return;
 
     const controller = new AbortController();
     const ts = new Date().getTime().toString();
     const hash = md5(ts + privateKey + publicKey);
 
-    setIsLoading(true);
+    if (isInitialLoad) {
+      setIsLoading(true);
+      setData([]);
+      setOffset(0);
+    } else {
+      setIsFetchingMore(true);
+    }
 
     apiClient
       .get<FetchResponse<T>>(endpoint, {
@@ -47,35 +62,61 @@ const useData = <T>(endpoint: string, deps: any[], query: string) => {
           ts,
           apikey: publicKey,
           hash,
-          offset: 0,
+          offset,
           limit: 50,
           ...(query && { nameStartsWith: query }),
         },
       })
       .then((res) => {
         console.log("Full API response:", res.data);
-        setData((prevData) => [...(prevData || []), ...res.data.data.results]);
+        const newResults = res.data.data.results;
+
+        // Update data and pagination state
+        setData((prevData) => [
+          ...prevData,
+          ...newResults.filter(
+            (newItem) => !prevData.some((item) => item.id === newItem.id)
+          ),
+        ]);
         setOffset((prevOffset) => prevOffset + res.data.data.count);
         setHasMore(
           res.data.data.offset + res.data.data.count < res.data.data.total
         );
         setIsLoading(false);
+        setIsFetchingMore(false);
       })
       .catch((err) => {
         if (err instanceof CanceledError) return;
-        console.error("Fetch error:", err.message);
-        setError(err);
+        console.error("Fetch error:", (err as Error).message);
+        setError(err as Error);
         setIsLoading(false);
+        setIsFetchingMore(false);
       });
 
     return () => controller.abort();
   };
 
   useEffect(() => {
-    fetchData();
-  }, [query, offset, ...deps]);
+    fetchData(true); // Initial load
+  }, [query, endpoint, ...deps]);
 
-  return { data, isLoading, error };
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + window.scrollY >=
+          document.documentElement.scrollHeight - 500 &&
+        !isFetchingMore &&
+        hasMore
+      ) {
+        fetchData();
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isFetchingMore, hasMore, offset]);
+
+  return { data, isLoading, error, isFetchingMore };
 };
 
 export default useData;
