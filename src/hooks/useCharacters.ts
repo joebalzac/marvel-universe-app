@@ -26,6 +26,7 @@ interface UseMarvelResults {
   isLoading?: boolean;
   loadMore: () => void;
   isFetchingMore: boolean;
+  searchQuery?: string;
 }
 
 const useCharacters = (

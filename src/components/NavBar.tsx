@@ -1,29 +1,22 @@
-import { useState } from "react";
 import SearchInput from "./SearchInput";
-import useCharacters from "../hooks/useCharacters";
 
-const NavBar = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const { data, error, isLoading, isFetchingMore } = useCharacters({
-    query: searchQuery,
-  });
+interface NavBarProps {
+  onSearch: (searchText: string) => void;
+}
 
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-  };
-
-  if (error) {
-    return <div>{error}</div>;
-  }
-
+const NavBar = ({ onSearch }: NavBarProps) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 mx-auto">
-      <img
-        src={"/assets/marvel-logo.svg"}
-        alt="Marvel Logo"
-        className="w-full"
-      />
-      <SearchInput onSearch={handleSearch} />
+    <div className="flex justify-start items-center p-5">
+      <div>
+        <img
+          src={"/assets/marvel-logo.svg"}
+          alt="Marvel Logo"
+          className="w-full"
+        />
+      </div>
+      <div className="pl-20 w-full max-w-3xl">
+        <SearchInput onSearch={onSearch} />
+      </div>
     </div>
   );
 };

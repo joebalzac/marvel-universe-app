@@ -4,8 +4,14 @@ import CharacterCardContainer from "./CharacterCardContainer";
 import CharacterCardSkeleton from "./CharacterCardSkeleton";
 import LoadingSpinner from "./LoadingSpinner";
 
-const CharacterGrid = () => {
-  const { data, error, isLoading, isFetchingMore } = useCharacters();
+interface CharacterGridProps {
+  searchQuery: string;
+}
+
+const CharacterGrid = ({ searchQuery }: CharacterGridProps) => {
+  const { data, error, isLoading, isFetchingMore } = useCharacters({
+    query: searchQuery,
+  });
   const skeletons = [...Array(10).keys()];
 
   if (error) {
@@ -15,7 +21,7 @@ const CharacterGrid = () => {
   return (
     <>
       {error && <div className="text-red-500">{error}</div>}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-5">
         {isLoading
           ? skeletons.map((skeleton) => (
               <CharacterCardContainer key={skeleton}>

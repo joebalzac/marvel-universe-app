@@ -12,13 +12,13 @@ const SearchInput = ({ onSearch }: SearchInputProps) => {
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       onSearch(inputValue);
-    }, 500); // Debounce delay
-
+    }, 500);
     return () => clearTimeout(delayDebounce);
   }, [inputValue, onSearch]);
 
   return (
     <form
+      className="w-full"
       action=""
       onSubmit={(e) => {
         e.preventDefault();
@@ -27,22 +27,24 @@ const SearchInput = ({ onSearch }: SearchInputProps) => {
         }
       }}
     >
-      <div>
-        {/* <IoIosSearch className="absolute top-2/4 left-3 translate-x-1/2 text-lg pointer-events-none z-10" /> */}
-        <input
-          className="bg-[<url('/img/hero-pattern.svg')>] border border-gray-400 p-2 h-11 w-full rounded-3xl
-          focus:outline-none focus:ring focus:border-blue-300 text-gray-950"
-          ref={ref}
-          type="text"
-          placeholder="Search for a character"
-          onChange={(e) => setInputValue(e.target.value)}
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (ref.current) {
-              onSearch(ref.current.value);
-            }
-          }}
-        />
+      <div className="relative">
+        <div>
+          <input
+            className="bg-[<url('/img/hero-pattern.svg')>] border border-gray-400 p-2 h-11 w-full rounded-3xl
+          focus:outline-none focus:ring focus:border-blue-300 text-gray-950 pr-8 pl-11 text-xl"
+            ref={ref}
+            type="text"
+            placeholder="Search for a character"
+            onChange={(e) => {
+              setInputValue(e.target.value);
+              onSearch(e.target.value);
+              console.log(e.target.value);
+            }}
+          />
+        </div>
+        <button className="absolute top-3 left-3 z-10">
+          <IoIosSearch className="text-gray-950 text-2xl" />
+        </button>
       </div>
     </form>
   );
