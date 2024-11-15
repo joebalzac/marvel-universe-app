@@ -5,16 +5,21 @@ import { useState } from "react";
 
 function App() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortOrder, setSortOrder] = useState<string>("");
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
   };
 
+  const handleSortOrderChange = (order: string) => {
+    setSortOrder(order);
+  };
+
   return (
     <>
       <div className="flex flex-col">
-        <NavBar onSearch={handleSearch} />
-        <CharacterGrid searchQuery={searchQuery} />
+        <NavBar onSearch={handleSearch} onSelectOrder={handleSortOrderChange} />
+        <CharacterGrid searchQuery={searchQuery} sortOrder={sortOrder} />
       </div>
     </>
   );

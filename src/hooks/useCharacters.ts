@@ -27,15 +27,17 @@ interface UseMarvelResults {
   loadMore: () => void;
   isFetchingMore: boolean;
   searchQuery?: string;
+  sortOrder?: string;
 }
 
 const useCharacters = (
   params: {
     query?: string;
+    sort?: string;
     theme?: string;
   } = {}
 ): UseMarvelResults => {
-  const { query = "" } = params;
+  const { query = "", sort = "" } = params;
   const [page, setPage] = useState(0);
   // const apiParams = JSON.stringify({
   //   query: query,
@@ -44,7 +46,7 @@ const useCharacters = (
 
   const { data, error, isLoading, isFetchingMore } = useData<MarvelCharacter>(
     "/v1/public/characters",
-    [query, page],
+    [query, sort, page],
     query
   );
 

@@ -777,6 +777,10 @@ video {
   justify-content: center;
 }
 
+.justify-between {
+  justify-content: space-between;
+}
+
 .gap-4 {
   gap: 1rem;
 }

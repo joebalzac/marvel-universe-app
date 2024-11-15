@@ -1,12 +1,14 @@
 import SearchInput from "./SearchInput";
+import SortSelector from "./SortSelector";
 
 interface NavBarProps {
   onSearch: (searchText: string) => void;
+  onSelectOrder: (order: string) => void;
 }
 
-const NavBar = ({ onSearch }: NavBarProps) => {
+const NavBar = ({ onSearch, onSelectOrder }: NavBarProps) => {
   return (
-    <div className="flex justify-start items-center p-5">
+    <div className="flex justify-between items-center p-5">
       <div>
         <img
           src={"/assets/marvel-logo.svg"}
@@ -16,6 +18,9 @@ const NavBar = ({ onSearch }: NavBarProps) => {
       </div>
       <div className="pl-20 w-full max-w-3xl">
         <SearchInput onSearch={onSearch} />
+      </div>
+      <div>
+        <SortSelector onSelectOrder={onSelectOrder} />
       </div>
     </div>
   );

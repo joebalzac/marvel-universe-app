@@ -6,11 +6,13 @@ import LoadingSpinner from "./LoadingSpinner";
 
 interface CharacterGridProps {
   searchQuery: string;
+  sortOrder: string;
 }
 
-const CharacterGrid = ({ searchQuery }: CharacterGridProps) => {
+const CharacterGrid = ({ searchQuery, sortOrder }: CharacterGridProps) => {
   const { data, error, isLoading, isFetchingMore } = useCharacters({
     query: searchQuery,
+    sort: sortOrder,
   });
   const skeletons = [...Array(10).keys()];
 
