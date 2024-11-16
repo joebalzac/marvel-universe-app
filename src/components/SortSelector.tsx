@@ -9,12 +9,10 @@ const SortSelector = ({ onSelectOrder }: SortSelectorProps) => {
   const [currentSortOrder, setCurrentSortOrder] = useState<string>("");
   const sortOrders = [
     { value: "", label: "Relevance" },
-    { value: "name-asc", label: "Name (A-Z)" },
-    { value: "name-desc", label: "Name (Z-A)" },
+    { value: "name", label: "Name (A-Z)" },
+    { value: "-name", label: "Name (Z-A)" },
     { value: "-modified", label: "Recently Modified" },
-    { value: "comics", label: "Most Comics" },
-    { value: "series", label: "Most Series" },
-    { value: "stories", label: "Most Stories" },
+    { value: "modified", label: "Least Recently Modified" },
   ];
 
   const handleSelect = (order: string) => {

@@ -11,6 +11,7 @@ interface MarvelData<T> {
   limit: number;
   total: number;
   count: number;
+  orderBy: string;
   results: T[];
 }
 
@@ -31,7 +32,8 @@ interface Identifiable {
 const useData = <T extends Identifiable>(
   endpoint: string,
   deps: any[],
-  query: string
+  query: string,
+  sortOrder: string
 ) => {
   const [data, setData] = useState<T[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -63,6 +65,7 @@ const useData = <T extends Identifiable>(
           apikey: publicKey,
           hash,
           offset,
+          orderBy: sortOrder,
           limit: 50,
           ...(query && { nameStartsWith: query }),
         },
@@ -98,7 +101,7 @@ const useData = <T extends Identifiable>(
 
   useEffect(() => {
     fetchData(true); // Initial load
-  }, [query, endpoint, ...deps]);
+  }, [query, endpoint, sortOrder, ...deps]);
 
   useEffect(() => {
     const handleScroll = () => {

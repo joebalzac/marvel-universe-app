@@ -39,15 +39,15 @@ const useCharacters = (
 ): UseMarvelResults => {
   const { query = "", sort = "" } = params;
   const [page, setPage] = useState(0);
-  // const apiParams = JSON.stringify({
-  //   query: query,
-  //   theme: theme || undefined,
-  // });
+
+  const limit = 50; 
+  const offset = page * limit; 
 
   const { data, error, isLoading, isFetchingMore } = useData<MarvelCharacter>(
     "/v1/public/characters",
-    [query, sort, page],
-    query
+    [query, sort, offset],
+    query,
+    sort
   );
 
   const loadMore = () => setPage((prevPage) => prevPage + 1);
