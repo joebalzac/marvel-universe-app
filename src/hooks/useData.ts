@@ -74,7 +74,6 @@ const useData = <T extends Identifiable>(
         console.log("Full API response:", res.data);
         const newResults = res.data.data.results;
 
-        // Update data and pagination state
         setData((prevData) => [
           ...prevData,
           ...newResults.filter(
@@ -100,7 +99,7 @@ const useData = <T extends Identifiable>(
   };
 
   useEffect(() => {
-    fetchData(true); // Initial load
+    fetchData(true);
   }, [query, endpoint, sortOrder, ...deps]);
 
   useEffect(() => {
