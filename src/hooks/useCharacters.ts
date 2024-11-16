@@ -10,13 +10,21 @@ export interface MarvelCharacter {
     path: string;
     extension: string;
   };
+  resourceURI: string;
   comics: {
     available: number;
-    items: { name: string }[];
+    collectionURI: string;
+    items: { name: string; resourceURI: string }[];
   };
   series: {
     available: number;
-    items: { name: string }[];
+    collectionURI: string;
+    items: { name: string; resourceURI: string }[];
+  };
+  stories: {
+    available: number;
+    collectionURI: string;
+    items: { name: string; resourceURI: string }[];
   };
 }
 
@@ -40,8 +48,8 @@ const useCharacters = (
   const { query = "", sort = "" } = params;
   const [page, setPage] = useState(0);
 
-  const limit = 50; 
-  const offset = page * limit; 
+  const limit = 50;
+  const offset = page * limit;
 
   const { data, error, isLoading, isFetchingMore } = useData<MarvelCharacter>(
     "/v1/public/characters",
