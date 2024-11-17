@@ -36,7 +36,7 @@ const CharacterGrid = ({ searchQuery, sortOrder }: CharacterGridProps) => {
                   !character.thumbnail.path.includes("image_not_available")
               )
               .map((character) => (
-                <CharacterCardContainer key={character.id}>
+                <CharacterCardContainer  key={character.id}>
                   <CharacterCard character={character} />
                 </CharacterCardContainer>
               ))}

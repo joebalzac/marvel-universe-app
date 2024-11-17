@@ -2,6 +2,7 @@ import "./input.css";
 import CharacterGrid from "./components/CharacterGrid";
 import NavBar from "./components/NavBar";
 import { useState } from "react";
+import CharacterHeading from "./components/CharacterHeading";
 
 function App() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -19,6 +20,7 @@ function App() {
     <>
       <div className="flex flex-col">
         <NavBar onSearch={handleSearch} onSelectOrder={handleSortOrderChange} />
+        <CharacterHeading />
         <CharacterGrid searchQuery={searchQuery} sortOrder={sortOrder} />
       </div>
     </>
