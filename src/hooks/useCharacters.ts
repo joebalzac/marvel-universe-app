@@ -15,6 +15,7 @@ export interface MarvelCharacter {
     available: number;
     collectionURI: string;
     items: { name: string; resourceURI: string }[];
+    message?: string;
   };
   series: {
     available: number;

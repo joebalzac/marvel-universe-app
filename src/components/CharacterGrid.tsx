@@ -1,4 +1,5 @@
-import useCharacters from "../hooks/useCharacters";
+import { useState } from "react";
+import useCharacters, { MarvelCharacter } from "../hooks/useCharacters";
 import CharacterCard from "./CharacterCard";
 import CharacterCardContainer from "./CharacterCardContainer";
 import CharacterCardSkeleton from "./CharacterCardSkeleton";
@@ -10,6 +11,7 @@ interface CharacterGridProps {
 }
 
 const CharacterGrid = ({ searchQuery, sortOrder }: CharacterGridProps) => {
+  useState<MarvelCharacter | null>(null);
   const { data, error, isLoading, isFetchingMore } = useCharacters({
     query: searchQuery,
     sort: sortOrder,
@@ -36,7 +38,7 @@ const CharacterGrid = ({ searchQuery, sortOrder }: CharacterGridProps) => {
                   !character.thumbnail.path.includes("image_not_available")
               )
               .map((character) => (
-                <CharacterCardContainer  key={character.id}>
+                <CharacterCardContainer key={character.id}>
                   <CharacterCard character={character} />
                 </CharacterCardContainer>
               ))}

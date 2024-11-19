@@ -1,19 +1,21 @@
+import { useState } from "react";
 import { MarvelCharacter } from "../hooks/useCharacters";
+import DetailsDrawer from "./DetailsDrawer";
 
 interface Character {
   character: MarvelCharacter;
 }
 
-const onHover = (e: React.MouseEvent<HTMLDivElement>) => {
-  const currentBlock = e.currentTarget.querySelector(".desc-block");
-  currentBlock?.classList.toggle("hidden");
-};
-
 const CharacterCard = ({ character }: Character) => {
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const toggleDrawer = () => {
+    setIsDrawerOpen((prev) => !prev);
+  };
+
   return (
     <div
-      onMouseEnter={onHover}
-      onMouseLeave={onHover}
+      onClick={toggleDrawer}
       className="bg-slate-900 shadow-sm overflow-hidden radius flex flex-col justify-center cursor-pointer transition-transform transform hover:scale-105 hover:shadow-lg"
       key={character.id}
     >
@@ -29,17 +31,13 @@ const CharacterCard = ({ character }: Character) => {
       </div>
       <div className="p-8">
         <h2 className="text-2xl text-white font-semibold">{character.name}</h2>
-        <div className="desc-block hidden">
-          {character.description && (
-            <p className="text-1xl py-4">{character.description}</p>
-          )}
-          <h3>
-            Comics:
-            {character.comics.items.map((comic) => (
-              <h3>{comic.name}</h3>
-            ))}
-          </h3>
-        </div>
+        {isDrawerOpen && (
+          <DetailsDrawer
+            character={character}
+            isOpen={isDrawerOpen}
+            onClose={toggleDrawer}
+          />
+        )}
       </div>
     </div>
   );
