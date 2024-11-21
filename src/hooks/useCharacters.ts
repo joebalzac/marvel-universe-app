@@ -55,7 +55,7 @@ const useCharacters = (
   const { data, error, isLoading, isFetchingMore } = useData<MarvelCharacter>(
     "/v1/public/characters",
     [query, sort, offset],
-    query,
+    query ? `nameStartsWith=${query}` : "",
     sort
   );
 

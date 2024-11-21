@@ -67,7 +67,6 @@ const useData = <T extends Identifiable>(
           offset,
           orderBy: sortOrder,
           limit: 50,
-          ...(query && { nameStartsWith: query }),
         },
       })
       .then((res) => {

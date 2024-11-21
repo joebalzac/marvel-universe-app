@@ -4,6 +4,7 @@ import CharacterCard from "./CharacterCard";
 import CharacterCardContainer from "./CharacterCardContainer";
 import CharacterCardSkeleton from "./CharacterCardSkeleton";
 import LoadingSpinner from "./LoadingSpinner";
+import { useNavigate } from "react-router-dom";
 
 interface CharacterGridProps {
   searchQuery: string;
@@ -12,6 +13,7 @@ interface CharacterGridProps {
 
 const CharacterGrid = ({ searchQuery, sortOrder }: CharacterGridProps) => {
   useState<MarvelCharacter | null>(null);
+  const navigate = useNavigate();
   const { data, error, isLoading, isFetchingMore } = useCharacters({
     query: searchQuery,
     sort: sortOrder,
@@ -39,7 +41,14 @@ const CharacterGrid = ({ searchQuery, sortOrder }: CharacterGridProps) => {
               )
               .map((character) => (
                 <CharacterCardContainer key={character.id}>
-                  <CharacterCard character={character} />
+                  <CharacterCard
+                    character={character}
+                    onClick={() =>
+                      navigate(`/characters/${character.id}`, {
+                        state: character,
+                      })
+                    }
+                  />
                 </CharacterCardContainer>
               ))}
       </div>
