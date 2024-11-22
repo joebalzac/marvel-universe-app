@@ -35,7 +35,7 @@ const useComics = (
     limit = 50,
     offset = 0,
     sortOrder = "title",
-    characterId = 0,
+    characterId,
   } = params;
 
   const { data, error, isLoading } = useData<MarvelComic>(

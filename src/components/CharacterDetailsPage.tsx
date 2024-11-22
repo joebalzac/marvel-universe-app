@@ -3,11 +3,13 @@ import { useLocation, useParams } from "react-router-dom";
 import useComics, { MarvelComic } from "@/hooks/useComics";
 
 const CharacterDetailsPage = () => {
-  const { characterId } = useParams();
+  const { characterId } = useParams<{ characterId: string }>(); // Get characterId from URL
   const location = useLocation();
   const character = location.state as MarvelCharacter;
 
-  const { data: comics, error } = useComics();
+  const { data: comics, error } = useComics({
+    characterId: Number(characterId),
+  });
 
   if (error) {
     return <div>{error}</div>;
