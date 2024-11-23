@@ -4,15 +4,11 @@ export interface MarvelComic {
   id: number;
   title: string;
   issueNumber: number;
-  description: string;
+  description?: string;
   pageCount: number;
-  thumbnail: string;
+  thumbnail: { path: string; extension: string };
   resourceURI: string;
-  images: string[];
-  image: {
-    path: string;
-    extension: string;
-  };
+  images?: { path: string; extension: string }[];
 }
 
 interface UseMarvelComicResults {
@@ -38,10 +34,20 @@ const useComics = (
     characterId,
   } = params;
 
+  const queryString = [
+    query && `titleStartsWith=${query}`,
+    characterId && `characters=${characterId}`,
+    `limit=${limit}`,
+    `offset=${offset}`,
+    `orderBy=${sortOrder}`,
+  ]
+    .filter(Boolean)
+    .join("&");
+
   const { data, error, isLoading } = useData<MarvelComic>(
-    "/v1/public/comics",
+    `/v1/public/comics?${queryString}`,
     [query, limit, offset, sortOrder, characterId],
-    query ? `titleStartsWith=${query}` : "",
+    queryString,
     sortOrder
   );
 
