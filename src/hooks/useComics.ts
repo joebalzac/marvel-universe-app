@@ -44,11 +44,20 @@ const useComics = (
     .filter(Boolean)
     .join("&");
 
+  const customParams = {
+    ...(query && { titleStartsWith: query }),
+    ...(characterId && { characters: characterId }),
+    limit,
+    offset,
+    orderBy: sortOrder,
+  };
+
   const { data, error, isLoading } = useData<MarvelComic>(
     `/v1/public/comics?${queryString}`,
     [query, limit, offset, sortOrder, characterId],
     queryString,
-    sortOrder
+    sortOrder,
+    customParams
   );
 
   if (error) {

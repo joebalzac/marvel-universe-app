@@ -27,8 +27,9 @@ const CharacterDetailsPage = () => {
             src={`${character.thumbnail?.path}.${character.thumbnail.extension}`}
             alt={character.name}
           />
-          <div className="bg-slate-900 p-6 border-sky-100 border-2">
-            <div className="border-b-2 border-slate-800 pb-4">
+          <div className="relative bg-slate-900 p-6 border-sky-100 border-2">
+            <div className="absolute inset-0 bg-[url('/assets/universe.jpg')] bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none"></div>
+            <div className="relative z-10 border-b-2 border-slate-800 pb-4">
               <h1 className="text-4xl">{character.name}</h1>
               {character.description && (
                 <p className="text-2xl py-4 max-w-4xl">
@@ -38,16 +39,18 @@ const CharacterDetailsPage = () => {
             </div>
           </div>
         </div>
-        <h2>Comics</h2>
-        <ul className="space-y-2 grid grid-cols-3 gap-5">
+        <h2 className="text-3xl">Featured Comics</h2>
+        <ul className="space-y-2 grid grid-cols-3 gap-5 pt-8">
           {comics?.map((comic: MarvelComic) => (
             <li key={comic.id}>
-              <img
-                className="object-cover max-w-80"
-                src={`${comic.thumbnail.path}.${comic.thumbnail.extension}`}
-                alt={comic.title}
-              />
-              <h3>{comic.title}</h3>
+              <a href={comic.resourceURI} className="cursor-pointer">
+                <img
+                  className="object-cover max-w-80"
+                  src={`${comic.thumbnail.path}.${comic.thumbnail.extension}`}
+                  alt={comic.title}
+                />
+                <h3 className="text-1xl py-4">{comic.title}</h3>
+              </a>
             </li>
           ))}
         </ul>

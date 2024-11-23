@@ -52,11 +52,14 @@ const useCharacters = (
   const limit = 50;
   const offset = page * limit;
 
+  const customParams = query ? { nameStartsWith: query } : {};
+
   const { data, error, isLoading, isFetchingMore } = useData<MarvelCharacter>(
     "/v1/public/characters",
     [query, sort, offset],
-    query ? `nameStartsWith=${query}` : "",
-    sort
+    query,
+    sort,
+    customParams
   );
 
   const loadMore = () => setPage((prevPage) => prevPage + 1);

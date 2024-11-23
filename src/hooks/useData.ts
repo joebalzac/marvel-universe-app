@@ -33,7 +33,8 @@ const useData = <T extends Identifiable>(
   endpoint: string,
   deps: any[],
   query: string,
-  sortOrder: string
+  sortOrder: string,
+  customParams: any = {}
 ) => {
   const [data, setData] = useState<T[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -67,6 +68,7 @@ const useData = <T extends Identifiable>(
           offset,
           orderBy: sortOrder,
           limit: 50,
+          ...customParams,
         },
       })
       .then((res) => {
