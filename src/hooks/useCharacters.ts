@@ -32,35 +32,37 @@ export interface MarvelCharacter {
 interface UseMarvelResults {
   data: MarvelCharacter[] | undefined;
   error: string | null;
-  isLoading?: boolean;
+  isLoading: boolean;
   loadMore: () => void;
   isFetchingMore: boolean;
-  searchQuery?: string;
-  sortOrder?: string;
 }
 
-const useCharacters = (
-  params: {
-    query?: string;
-    sort?: string;
-    theme?: string;
-  } = {}
-): UseMarvelResults => {
-  const { query = "", sort = "" } = params;
+const useCharacters = ({
+  query = "",
+  sort = "",
+  limit = 50,
+}: {
+  query?: string;
+  sort?: string;
+  limit?: number;
+} = {}): UseMarvelResults => {
   const [page, setPage] = useState(0);
 
-  const limit = 50;
   const offset = page * limit;
 
-  const customParams = query ? { nameStartsWith: query } : {};
+  // Dynamic filters for API
+  const filters = {
+    ...(query && { nameStartsWith: query }),
+    ...(sort && { orderBy: sort }),
+    limit,
+    offset,
+  };
 
-  const { data, error, isLoading, isFetchingMore } = useData<MarvelCharacter>(
-    "/v1/public/characters",
-    [query, sort, offset],
-    query,
-    sort,
-    customParams
-  );
+  const { data, error, isLoading, isFetchingMore } = useData<MarvelCharacter>({
+    endpoint: "/v1/public/characters",
+    filters,
+    deps: [query, sort, offset],
+  });
 
   const loadMore = () => setPage((prevPage) => prevPage + 1);
 
@@ -72,4 +74,5 @@ const useCharacters = (
     isFetchingMore,
   };
 };
+
 export default useCharacters;

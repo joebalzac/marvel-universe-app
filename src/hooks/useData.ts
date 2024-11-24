@@ -29,13 +29,21 @@ interface Identifiable {
   id: number;
 }
 
-const useData = <T extends Identifiable>(
-  endpoint: string,
-  deps: any[],
-  query: string,
-  sortOrder: string,
-  customParams: any = {}
-) => {
+interface UseDataParams {
+  endpoint: string;
+  filters?: Record<string, string | number | boolean>;
+  deps?: any[];
+  limit?: number;
+  sortOrder?: string;
+}
+
+const useData = <T extends Identifiable>({
+  endpoint,
+  filters = {},
+  sortOrder = "",
+  deps = [],
+  limit = 50,
+}: UseDataParams) => {
   const [data, setData] = useState<T[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isFetchingMore, setIsFetchingMore] = useState<boolean>(false);
@@ -66,9 +74,9 @@ const useData = <T extends Identifiable>(
           apikey: publicKey,
           hash,
           offset,
+          limit,
           orderBy: sortOrder,
-          limit: 50,
-          ...customParams,
+          ...filters,
         },
       })
       .then((res) => {
@@ -101,7 +109,7 @@ const useData = <T extends Identifiable>(
 
   useEffect(() => {
     fetchData(true);
-  }, [query, endpoint, sortOrder, ...deps]);
+  }, [endpoint, sortOrder, ...deps]);
 
   useEffect(() => {
     const handleScroll = () => {

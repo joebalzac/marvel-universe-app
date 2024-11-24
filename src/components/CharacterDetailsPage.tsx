@@ -1,13 +1,18 @@
 import { MarvelCharacter } from "@/hooks/useCharacters";
 import { useLocation, useParams } from "react-router-dom";
 import useComics, { MarvelComic } from "@/hooks/useComics";
+import LoadingSpinner from "./LoadingSpinner";
 
 const CharacterDetailsPage = () => {
   const { characterId } = useParams<{ characterId: string }>(); // Get characterId from URL
   const location = useLocation();
   const character = location.state as MarvelCharacter;
 
-  const { data: comics, error } = useComics({
+  const {
+    data: comics,
+    error,
+    isLoading,
+  } = useComics({
     characterId: Number(characterId),
   });
 
@@ -40,6 +45,7 @@ const CharacterDetailsPage = () => {
           </div>
         </div>
         <h2 className="text-3xl">Featured Comics</h2>
+        {isLoading && <LoadingSpinner />}
         <ul className="space-y-2 grid grid-cols-3 gap-5 pt-8">
           {comics?.map((comic: MarvelComic) => (
             <li key={comic.id}>
