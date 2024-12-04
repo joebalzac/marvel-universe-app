@@ -8,6 +8,7 @@ export interface MarvelComic {
   pageCount: number;
   thumbnail: { path: string; extension: string };
   resourceURI: string;
+  urls: { type: string; url: string }[];
   images?: { path: string; extension: string }[];
 }
 
